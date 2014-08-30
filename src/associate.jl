@@ -9,7 +9,7 @@ function update_async!(net::HopfieldNetwork, activatefunc::Function)
 	return
 end
 
-function associate!{T <: Number}(net::HopfieldNetwork, pattern::AbstractVector{T}, activatefunc::Function, iterations::Integer = 1_000)
+function associate!{T <: Number}(net::HopfieldNetwork{T}, pattern::AbstractVector{T}, activatefunc::Function, iterations::Integer = 1_000)
 	copy!(net.state, pattern)
 	associate!(net,activatefunc,iterations)
 end
