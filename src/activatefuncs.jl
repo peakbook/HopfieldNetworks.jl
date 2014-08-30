@@ -31,17 +31,27 @@ function arg{T<:Real}(z::Complex{T})
     return atan2(imag(z),real(z))
 end
 
-function quantization{T<:Real}(q::Quaternion{T},A::Integer,B::Integer,C::Integer)
+function quantization_{T<:Real}(q::Quaternion{T},A::Integer,B::Integer,C::Integer)
     qarg = QuaternionArg(q)
     if randbool()
+        phi = qarg.phi
+        theta = qsign(qarg.theta, 0.5, B)
+        psi = qsign(qarg.psi, 0.25, C)
+    else
         phi = qsign(qarg.phi, 1.0, A)
         theta = qsign(qarg.theta, 0.5, B)
         psi = qarg.psi
-    else
-        phi = qsign(qarg.phi, 1.0, A)
-        theta = qarg.theta
-        psi = qsign(qarg.psi, 0.25, C)
     end
+    return Quaternion(QuaternionArg(one(T),phi,theta,psi))
+end
+
+function quantization{T<:Real}(q::Quaternion{T},A::Integer,B::Integer,C::Integer)
+    qarg = QuaternionArg(q)
+
+    phi = qsign(qarg.phi, 1.0, A)
+    theta = qsign(qarg.theta, 0.5, B)
+    psi = qsign(qarg.psi, 0.25, C)
+
     return Quaternion(QuaternionArg(one(T),phi,theta,psi))
 end
 
@@ -50,12 +60,11 @@ function qsign(phase::Real, coef::Real, K::Integer)
     phase0 = -pi*coef
     for i=1:K
         if phase0 <= phase && phase < phase0+dphase
-            phase = phase0
             break
         end
         phase0+=dphase
     end
-    return phase+0.5*dphase
+    return phase0+0.5*dphase
 end
 # }}}
 
