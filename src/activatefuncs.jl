@@ -59,16 +59,17 @@ function qsign(phase::Real, coef::Real, K::Integer)
     dphase = 2*pi/K*coef
     phase0 = -pi*coef
     flg = false
-    for i=1:K-1
+
+    # phase regulation
+    phase = phase < phase0 ? phase0 : (phase >= -phase0 ? -phase0-0.5*dphase : phase)
+    for i=1:K
         if phase0 <= phase && phase < phase0+dphase
             flg = true
             break
         end
         phase0+=dphase
     end
-    if !flg
-        phase0 = -pi*coef+(K-1)*dphase
-    end
+    @assert(flg)
  
     return phase0+0.5*dphase
 end
