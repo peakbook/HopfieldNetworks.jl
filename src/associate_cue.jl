@@ -124,6 +124,16 @@ function associate!{T <: Number}(net::HopfieldNetwork, cue_pattern::AbstractVect
 	return copy(net.state)
 end
 
+function associate_step_async!{T <: Number}(net::HopfieldNetwork, cue_pattern::AbstractVector{T},L::Integer, s::Real, beta::Real, gamma::Real)
+	update_cue_async!(net, cue_pattern, L, s, beta)
+	return beta_timestep(beta, gamma)
+end
+
+function associate_step_sync!{T <: Number}(net::HopfieldNetwork, cue_pattern::AbstractVector{T},L::Integer, s::Real, beta::Real, gamma::Real)
+	update_cue_sync!(net, cue_pattern, L, s, beta)
+	return beta_timestep(beta, gamma)
+end
+
 function beta_timestep(beta::Real, gamma::Real)
 	return gamma * beta;
 end
