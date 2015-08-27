@@ -2,8 +2,7 @@
 export associate!
 
 function update_async!(net::HopfieldNetwork, activatefunc::Function)
-	# ord = shuffle!([1:length(net.state)])
-	for i=1:length(net.state) # for i in ord
+	for i in randperm(length(net.state))
 		net.state[i] = activatefunc(dot(net.weight[:, i], net.state))
 	end
 	return

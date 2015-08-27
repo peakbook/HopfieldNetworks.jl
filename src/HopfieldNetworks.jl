@@ -2,6 +2,7 @@ module HopfieldNetworks
 
 using Lazy
 using Quaternions
+using Compat
 
 include("base.jl")
 include("learn_hebb.jl")

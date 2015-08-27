@@ -73,7 +73,7 @@ function internal_potential(W::AbstractArray{Float64}, x::AbstractVector{Float64
 			e2 = cue_pattern[pos_cue] * x[pos+n]
 		end
 	elseif L==4
-		n = int(length(x)/L)
+		n = round(Int,length(x)/L)
 		pos_cue = (pos -1)%n+1
 		block = ifloor((pos-1)/n)
 		@switch block begin
@@ -90,7 +90,7 @@ function internal_potential(W::AbstractArray{Float64}, x::AbstractVector{Float64
 end
 
 function update_cue_async!(net::HopfieldNetwork, cue_pattern::AbstractVector,L::Integer, s::Real, beta::Real)
-	ord = shuffle!([1:length(net.state)])
+	ord = randperm(length(net.state))
 	for i in ord
 		h = internal_potential(net.weight,net.state,cue_pattern,i,s,L)
 		net.state[i] = activatefunc(beta, h)
